@@ -21,6 +21,12 @@ Upload
 ↓
 Edit By Text
 ↓
+Auto Cleanup
+↓
+Light & Color
+↓
+Music
+↓
 Subtitle
 ↓
 Export
@@ -42,8 +48,8 @@ Non-goals:
 * Motion graphics
 * Advanced effects
 * Advanced transitions
-* Professional color grading
-* Professional audio editing
+* Professional cinematic color grading
+* Professional multi-track audio editing
 * Team collaboration
 
 ---
@@ -82,13 +88,16 @@ If the answer is no, it should not be included in the MVP.
 
 # MVP Scope
 
-The MVP consists of five major modules:
+The MVP consists of eight major modules:
 
 1. AI Script Assistant
 2. Video Upload & Processing
 3. Text-Based Editing
-4. Subtitle Generator
-5. Export System
+4. Auto Cleanup
+5. Light & Color Correction
+6. Music
+7. Subtitle Generator
+8. Export System
 
 ---
 
@@ -413,7 +422,120 @@ Users can:
 
 ---
 
-# Module 5: Subtitle Generator
+# Module 5: Light & Color Correction
+
+## Goal
+
+Provide fast, creator-friendly light and color correction for talking-head reels.
+
+This module is for natural correction, not creative cinematic looks.
+
+---
+
+## Available Controls
+
+* Exposure
+* Contrast
+* Highlights
+* Shadows
+* Temperature
+* Saturation
+
+---
+
+## Presets
+
+Available presets:
+
+* Natural
+* Warm
+* Cool
+* Bright
+
+Users can preview and switch presets instantly.
+
+---
+
+## AI Suggestion
+
+The app should suggest one light/color setup based on:
+
+* Transcript text
+* Speech pace
+* Cut rhythm
+
+Users can apply the suggestion with one click or adjust manually.
+
+---
+
+## Not Included In MVP
+
+* LUT import
+* Curves
+* Secondary color correction
+* Mask-based color grading
+
+---
+
+# Module 6: Music
+
+## Goal
+
+Allow users to add background music quickly without leaving the app.
+
+---
+
+## Music Sources
+
+### Source 1
+
+Built-in royalty-free music library.
+
+### Source 2
+
+Upload custom music file.
+
+Supported uploads:
+
+* MP3
+* WAV
+* M4A
+
+---
+
+## Music Controls
+
+* Select track
+* Trim start/end
+* Background volume
+* Fade in
+* Fade out
+
+Voice should always stay clear above music.
+
+---
+
+## AI Suggestion
+
+The app should suggest one background track based on:
+
+* Transcript text
+* Video rhythm
+* Speaking energy
+
+Users can replace or remove the suggested track anytime.
+
+---
+
+## Not Included In MVP
+
+* Multi-track audio mixing
+* Beat-level editing
+* AI music generation
+
+---
+
+# Module 7: Subtitle Generator
 
 ## Goal
 
@@ -455,7 +577,7 @@ Custom subtitle editing is not required for MVP.
 
 ---
 
-# Export System
+# Module 8: Export System
 
 ## Goal
 
@@ -481,6 +603,10 @@ MP4
 Source Video
 +
 Edit Instructions
++
+Color Profile
++
+Music Track
 +
 Subtitles
 ↓
@@ -523,6 +649,8 @@ Required mobile capabilities:
 * Record videos
 * Upload clips
 * Edit transcript
+* Apply light/color preset
+* Add music
 * Generate subtitles
 * Export videos
 
@@ -567,6 +695,8 @@ Responsibilities:
 * Video Upload Management
 * AI Integrations
 * Transcript Generation
+* Color Correction Management
+* Music Management
 * Subtitle Generation
 * Rendering Orchestration
 * Export Management
@@ -579,6 +709,8 @@ apps/
 ├── projects/
 ├── videos/
 ├── transcripts/
+├── colors/
+├── music/
 ├── exports/
 ├── ai/
 └── common/
@@ -627,6 +759,7 @@ Background tasks:
 * Subtitle generation
 * Silence removal
 * Breath removal
+* Color/music suggestion generation
 * Export rendering
 
 ---
@@ -643,6 +776,8 @@ Example:
 class AIProvider:
     generate_script()
     generate_transcript()
+    suggest_color_profile()
+    suggest_music_track()
 ```
 
 Current provider:
@@ -666,6 +801,7 @@ Store:
 * Original clips
 * Source videos
 * Transcript files
+* Uploaded music files
 * Subtitle files
 * Exported videos
 * Temporary render files
@@ -681,6 +817,8 @@ Responsibilities:
 * Clip merging
 * Cut generation
 * Silence removal
+* Color correction application
+* Background music mixing
 * Subtitle burn-in
 * Export generation
 
@@ -795,7 +933,6 @@ Keep authentication simple.
 
 The following features must NOT be implemented in MVP:
 
-* Music Library
 * Cover Generator
 * Thumbnail Generator
 * AI Avatars
@@ -804,6 +941,8 @@ The following features must NOT be implemented in MVP:
 * Stock Video Library
 * Multi-Track Editing
 * Advanced Effects
+* Cinematic filter packs
+* LUT marketplace
 * Motion Graphics
 * Collaboration
 * Team Workspaces
@@ -829,8 +968,10 @@ A first-time creator should be able to:
 6. Edit by deleting text.
 7. Remove silence.
 8. Remove long breaths.
-9. Generate subtitles.
-10. Export a reel.
+9. Apply light/color correction.
+10. Add background music.
+11. Generate subtitles.
+12. Export a reel.
 
 Target completion time:
 

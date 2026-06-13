@@ -198,6 +198,144 @@ POST
 
 ---
 
+# Color Correction
+
+## Get Current Profile
+
+GET
+
+```text
+/projects/{id}/color/
+```
+
+---
+
+## Update Manual Adjustments
+
+PATCH
+
+```text
+/projects/{id}/color/
+```
+
+Request:
+
+```json
+{
+  "exposure": 0,
+  "contrast": 0,
+  "highlights": 0,
+  "shadows": 0,
+  "temperature": 0,
+  "saturation": 0
+}
+```
+
+---
+
+## Apply Preset
+
+POST
+
+```text
+/projects/{id}/color/preset/
+```
+
+Request:
+
+```json
+{
+  "preset": "natural"
+}
+```
+
+---
+
+## AI Suggestion
+
+POST
+
+```text
+/projects/{id}/color/suggest/
+```
+
+---
+
+# Music
+
+## List Built-in Tracks
+
+GET
+
+```text
+/music/library/
+```
+
+---
+
+## Upload Music
+
+POST
+
+```text
+/projects/{id}/music/upload/
+```
+
+multipart/form-data
+
+---
+
+## Set Music Track
+
+POST
+
+```text
+/projects/{id}/music/select/
+```
+
+Request:
+
+```json
+{
+  "track_id": "",
+  "source": "library"
+}
+```
+
+---
+
+## Update Music Settings
+
+PATCH
+
+```text
+/projects/{id}/music/
+```
+
+Request:
+
+```json
+{
+  "start_time": 0,
+  "end_time": 0,
+  "volume": 0.25,
+  "fade_in": 0.5,
+  "fade_out": 0.5
+}
+```
+
+---
+
+## AI Music Suggestion
+
+POST
+
+```text
+/projects/{id}/music/suggest/
+```
+
+---
+
 # Subtitles
 
 ## Generate

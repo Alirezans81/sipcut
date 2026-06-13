@@ -118,6 +118,71 @@ Types:
 
 ---
 
+## ColorProfile
+
+```python
+id
+project_id
+preset
+exposure
+contrast
+highlights
+shadows
+temperature
+saturation
+source
+updated_at
+```
+
+Source:
+
+* manual
+* preset
+* ai_suggested
+
+---
+
+## MusicTrack
+
+```python
+id
+title
+artist
+license_type
+is_royalty_free
+duration
+path
+created_at
+```
+
+Represents built-in royalty-free tracks.
+
+---
+
+## ProjectMusic
+
+```python
+id
+project_id
+music_track_id
+uploaded_path
+source
+start_time
+end_time
+volume
+fade_in
+fade_out
+updated_at
+```
+
+Source:
+
+* library
+* uploaded
+* ai_suggested
+
+---
+
 ## Subtitle
 
 ```python

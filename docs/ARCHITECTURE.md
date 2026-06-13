@@ -95,6 +95,8 @@ Responsibilities:
 * Upload UI
 * Transcript Editor
 * Timeline UI
+* Light & Color UI
+* Music UI
 * Subtitle UI
 * Export UI
 
@@ -124,6 +126,8 @@ Responsibilities:
 * Project Management
 * AI Integration
 * Transcript Management
+* Color Correction Management
+* Music Management
 * Export Management
 * File Management
 * Processing Orchestration
@@ -139,6 +143,8 @@ apps/
 ├── scripts/
 ├── videos/
 ├── transcripts/
+├── colors/
+├── music/
 ├── subtitles/
 ├── exports/
 ├── ai/
@@ -160,6 +166,8 @@ Stores:
 * Scripts
 * Video Metadata
 * Transcript Metadata
+* Color Correction Profiles
+* Music Track Metadata
 * Export Metadata
 * Cleanup Operations
 
@@ -186,6 +194,7 @@ Stores:
 ```text
 Original Clips
 Merged Videos
+Uploaded Music
 Subtitle Files
 Rendered Videos
 Temporary Files
@@ -201,6 +210,7 @@ uploads/
 ├── projects/
 │   ├── clips/
 │   ├── merged/
+│   ├── music/
 │   ├── subtitles/
 │   └── exports/
 ```
@@ -297,6 +307,10 @@ Video
 +
 Edit Instructions
 +
+Color Profile
++
+Music Track
++
 Subtitles
 ```
 
@@ -327,6 +341,12 @@ class AIProvider:
         pass
 
     def generate_transcript(self):
+        pass
+
+    def suggest_color_profile(self):
+        pass
+
+    def suggest_music_track(self):
         pass
 ```
 
@@ -419,6 +439,46 @@ Cut Instructions
 
 ---
 
+### Apply Light & Color Correction
+
+Input:
+
+```text
+Video
++
+Color Profile
+```
+
+↓
+
+```text
+Corrected Video
+```
+
+---
+
+### Mix Background Music
+
+Input:
+
+```text
+Video
++
+Voice Audio
++
+Music Track
++
+Music Settings
+```
+
+↓
+
+```text
+Video With Balanced Music
+```
+
+---
+
 ### Burn Subtitles
 
 Input:
@@ -445,6 +505,10 @@ Input:
 Video
 +
 Cuts
++
+Color Profile
++
+Music
 +
 Subtitles
 ```
@@ -526,6 +590,10 @@ Ready For Editing
 ↓
 Apply Cleanup
 ↓
+Apply Light & Color
+↓
+Add Music
+↓
 Generate Subtitles
 ↓
 Export
@@ -594,13 +662,14 @@ The architecture should support future additions without major rewrites.
 
 Future Features:
 
-* Music Library
 * Cover Generator
 * Team Workspaces
 * Analytics
 * AI B-Roll
 * AI Voice Tools
 * Mobile Apps
+* Advanced color grading
+* Multi-track audio editor
 
 The MVP architecture should be built so these features can be added later without redesigning core systems.
 
@@ -631,6 +700,10 @@ Script
 Upload
 ↓
 Edit By Text
+↓
+Light & Color
+↓
+Music
 ↓
 Subtitle
 ↓

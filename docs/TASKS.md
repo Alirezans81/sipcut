@@ -159,7 +159,43 @@
 
 ---
 
-## Epic 11: Export
+## Epic 11: Light & Color Correction
+
+### Backend
+
+* Color profile model
+* Color profile endpoints
+* Preset apply service
+* AI color suggestion service
+
+### Frontend
+
+* Color controls panel
+* Preset selector
+* AI suggestion apply action
+* Before/after preview toggle
+
+---
+
+## Epic 12: Music
+
+### Backend
+
+* Built-in royalty-free music catalog
+* Music upload endpoint
+* Project music settings endpoint
+* AI music suggestion service
+
+### Frontend
+
+* Music library picker
+* Music upload UI
+* Volume and fade controls
+* AI music suggestion apply action
+
+---
+
+## Epic 13: Export
 
 ### Backend
 
@@ -174,7 +210,7 @@
 
 ---
 
-## Epic 12: Polish
+## Epic 14: Polish
 
 * Error handling
 * Loading states

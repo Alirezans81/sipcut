@@ -25,6 +25,10 @@ Edit By Text
 ↓
 Auto Cleanup
 ↓
+Light & Color
+↓
+Music
+↓
 Generate Subtitles
 ↓
 Export
@@ -395,6 +399,8 @@ Generate Transcript
 ↓
 Create Timeline
 ↓
+Generate AI Suggestions
+↓
 Ready For Editing
 ```
 
@@ -598,7 +604,97 @@ Original video is never modified.
 
 ---
 
-# Screen 9: Subtitle Generator
+# Screen 9: Light & Color
+
+## Purpose
+
+Apply natural light and color correction quickly.
+
+---
+
+## Controls
+
+```text
+Exposure
+Contrast
+Highlights
+Shadows
+Temperature
+Saturation
+```
+
+---
+
+## Presets
+
+```text
+Natural
+Warm
+Cool
+Bright
+```
+
+---
+
+## AI Suggestion
+
+System suggests one setup based on:
+
+```text
+Transcript Text
+Speech Pace
+Cut Rhythm
+```
+
+User can apply the suggestion with one tap.
+
+---
+
+# Screen 10: Music
+
+## Purpose
+
+Add background music before subtitle and export.
+
+---
+
+## Music Sources
+
+```text
+Built-in Royalty-Free Library
+Upload My Music
+```
+
+---
+
+## Controls
+
+```text
+Select Track
+Trim Start
+Trim End
+Volume
+Fade In
+Fade Out
+```
+
+---
+
+## AI Suggestion
+
+System suggests one track based on:
+
+```text
+Transcript Text
+Video Rhythm
+Speaking Energy
+```
+
+User can replace or remove the suggestion anytime.
+
+---
+
+# Screen 11: Subtitle Generator
 
 ## Purpose
 
@@ -636,7 +732,7 @@ Users can switch between presets instantly.
 
 ---
 
-# Screen 10: Export
+# Screen 12: Export
 
 ## Purpose
 
@@ -670,7 +766,7 @@ Create render job.
 
 ---
 
-# Screen 11: Export Progress
+# Screen 13: Export Progress
 
 ## Purpose
 
@@ -699,7 +795,7 @@ Rendering continues in background.
 
 ---
 
-# Screen 12: Export Complete
+# Screen 14: Export Complete
 
 ## Purpose
 
@@ -793,6 +889,8 @@ A user must be able to:
 * Upload clips
 * Edit transcript
 * Remove silence
+* Apply light and color correction
+* Add background music
 * Generate subtitles
 * Export reel
 * Download final video
@@ -811,8 +909,11 @@ A first-time user should be able to:
 2. Generate a script.
 3. Upload or record clips.
 4. Edit video by deleting text.
-5. Generate subtitles.
-6. Export a reel.
+5. Remove silence and long breaths.
+6. Apply light and color correction.
+7. Add background music.
+8. Generate subtitles.
+9. Export a reel.
 
 Target completion time:
 
