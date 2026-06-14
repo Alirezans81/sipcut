@@ -4,6 +4,8 @@
 
 SipCut is an AI-powered video editing platform designed for Instagram creators.
 
+**Platform Language:** Persian (Farsi)
+
 The purpose of SipCut is not to compete with professional video editors such as CapCut, Premiere Pro, or Final Cut Pro.
 
 The purpose of SipCut is to help creators go from idea to published reel as quickly as possible.
@@ -34,23 +36,23 @@ Export
 
 Target users:
 
-* Instagram creators
-* Solo content creators
-* Influencers
-* Coaches
-* Small business owners producing content
-* Users who do not want to learn professional video editing
+- Instagram creators
+- Solo content creators
+- Influencers
+- Coaches
+- Small business owners producing content
+- Users who do not want to learn professional video editing
 
 Non-goals:
 
-* Professional video editing
-* Multi-track editing
-* Motion graphics
-* Advanced effects
-* Advanced transitions
-* Professional cinematic color grading
-* Professional multi-track audio editing
-* Team collaboration
+- Professional video editing
+- Multi-track editing
+- Motion graphics
+- Advanced effects
+- Advanced transitions
+- Professional cinematic color grading
+- Professional multi-track audio editing
+- Team collaboration
 
 ---
 
@@ -137,11 +139,11 @@ AI Response:
 
 Every generated script must include:
 
-* Title
-* Hook
-* Main Script
-* Shot List
-* CTA
+- Title
+- Hook
+- Main Script
+- Shot List
+- CTA
 
 Example:
 
@@ -150,11 +152,7 @@ Example:
   "title": "3 Fat Loss Mistakes",
   "hook": "If you're doing these 3 things, you're slowing your fat loss.",
   "script": "...",
-  "shotList": [
-    "...",
-    "...",
-    "..."
-  ],
+  "shotList": ["...", "...", "..."],
   "cta": "Follow for more tips."
 }
 ```
@@ -163,7 +161,7 @@ Example:
 
 Current Provider:
 
-* GapGPT
+- GapGPT
 
 The implementation must use an abstraction layer.
 
@@ -214,9 +212,9 @@ CTA.mp4
 
 Before project creation:
 
-* Rename clips
-* Delete clips
-* Reorder clips
+- Rename clips
+- Delete clips
+- Reorder clips
 
 ---
 
@@ -299,9 +297,9 @@ Example:
 
 Users can:
 
-* Select text
-* Delete text
-* Undo changes
+- Select text
+- Delete text
+- Undo changes
 
 ---
 
@@ -333,17 +331,17 @@ Original files must never be modified.
 
 Store:
 
-* Original clips
-* Merged source video
-* Edit instructions
+- Original clips
+- Merged source video
+- Edit instructions
 
 Final videos are generated during export.
 
 This enables:
 
-* Undo
-* Re-edit
-* Re-export
+- Undo
+- Re-edit
+- Re-export
 
 without quality loss.
 
@@ -359,19 +357,19 @@ Visual feedback.
 
 Supported features:
 
-* Play
-* Pause
-* Seek
-* Show cuts
-* Show subtitle regions
+- Play
+- Pause
+- Seek
+- Show cuts
+- Show subtitle regions
 
 Not supported:
 
-* Multi-track editing
-* Dragging clips
-* Advanced trimming
-* Keyframes
-* Effects
+- Multi-track editing
+- Dragging clips
+- Advanced trimming
+- Keyframes
+- Effects
 
 Timeline is secondary.
 
@@ -407,18 +405,18 @@ Remove them automatically.
 
 Users can:
 
-* Preview changes
-* Apply changes
-* Undo changes
+- Preview changes
+- Apply changes
+- Undo changes
 
 ---
 
 ## Not Included In MVP
 
-* Filler word removal
-* Stutter removal
-* AI speech rewriting
-* Voice enhancement
+- Filler word removal
+- Stutter removal
+- AI speech rewriting
+- Voice enhancement
 
 ---
 
@@ -434,12 +432,12 @@ This module is for natural correction, not creative cinematic looks.
 
 ## Available Controls
 
-* Exposure
-* Contrast
-* Highlights
-* Shadows
-* Temperature
-* Saturation
+- Exposure
+- Contrast
+- Highlights
+- Shadows
+- Temperature
+- Saturation
 
 ---
 
@@ -447,10 +445,10 @@ This module is for natural correction, not creative cinematic looks.
 
 Available presets:
 
-* Natural
-* Warm
-* Cool
-* Bright
+- Natural
+- Warm
+- Cool
+- Bright
 
 Users can preview and switch presets instantly.
 
@@ -460,9 +458,9 @@ Users can preview and switch presets instantly.
 
 The app should suggest one light/color setup based on:
 
-* Transcript text
-* Speech pace
-* Cut rhythm
+- Transcript text
+- Speech pace
+- Cut rhythm
 
 Users can apply the suggestion with one click or adjust manually.
 
@@ -470,10 +468,10 @@ Users can apply the suggestion with one click or adjust manually.
 
 ## Not Included In MVP
 
-* LUT import
-* Curves
-* Secondary color correction
-* Mask-based color grading
+- LUT import
+- Curves
+- Secondary color correction
+- Mask-based color grading
 
 ---
 
@@ -497,19 +495,19 @@ Upload custom music file.
 
 Supported uploads:
 
-* MP3
-* WAV
-* M4A
+- MP3
+- WAV
+- M4A
 
 ---
 
 ## Music Controls
 
-* Select track
-* Trim start/end
-* Background volume
-* Fade in
-* Fade out
+- Select track
+- Trim start/end
+- Background volume
+- Fade in
+- Fade out
 
 Voice should always stay clear above music.
 
@@ -519,9 +517,9 @@ Voice should always stay clear above music.
 
 The app should suggest one background track based on:
 
-* Transcript text
-* Video rhythm
-* Speaking energy
+- Transcript text
+- Video rhythm
+- Speaking energy
 
 Users can replace or remove the suggested track anytime.
 
@@ -529,9 +527,9 @@ Users can replace or remove the suggested track anytime.
 
 ## Not Included In MVP
 
-* Multi-track audio mixing
-* Beat-level editing
-* AI music generation
+- Multi-track audio mixing
+- Beat-level editing
+- AI music generation
 
 ---
 
@@ -547,7 +545,7 @@ Automatically generate Persian subtitles.
 
 MVP only supports:
 
-* Persian
+- Persian
 
 ---
 
@@ -561,15 +559,15 @@ Subtitles are generated from transcript data.
 
 Available presets:
 
-* Clean
-* Bold
-* Reels
+- Clean
+- Bold
+- Reels
 
 Preset controls:
 
-* Font size
-* Position
-* Basic animation style
+- Font size
+- Position
+- Basic animation style
 
 Users can switch between presets.
 
@@ -631,28 +629,28 @@ The application must be fully responsive.
 
 Supported devices:
 
-* Mobile Browser
-* Tablet
-* Desktop
+- Mobile Browser
+- Tablet
+- Desktop
 
 Supported widths:
 
-* 360px+
-* Tablet
-* Desktop
+- 360px+
+- Tablet
+- Desktop
 
 Users must be able to complete the full workflow from mobile devices.
 
 Required mobile capabilities:
 
-* Generate scripts
-* Record videos
-* Upload clips
-* Edit transcript
-* Apply light/color preset
-* Add music
-* Generate subtitles
-* Export videos
+- Generate scripts
+- Record videos
+- Upload clips
+- Edit transcript
+- Apply light/color preset
+- Add music
+- Generate subtitles
+- Export videos
 
 without needing a desktop computer.
 
@@ -664,20 +662,20 @@ without needing a desktop computer.
 
 Framework:
 
-* Next.js
-* TypeScript
+- Next.js
+- TypeScript
 
 Suggested Stack:
 
-* Tailwind CSS
-* ShadCN UI
+- Tailwind CSS
+- ShadCN UI
 
 Requirements:
 
-* Responsive UI
-* Dark Mode
-* Accessible Components
-* Fast Loading
+- Responsive UI
+- Dark Mode
+- Accessible Components
+- Fast Loading
 
 ---
 
@@ -685,21 +683,21 @@ Requirements:
 
 Framework:
 
-* Django
-* Django REST Framework (DRF)
+- Django
+- Django REST Framework (DRF)
 
 Responsibilities:
 
-* Authentication
-* Project Management
-* Video Upload Management
-* AI Integrations
-* Transcript Generation
-* Color Correction Management
-* Music Management
-* Subtitle Generation
-* Rendering Orchestration
-* Export Management
+- Authentication
+- Project Management
+- Video Upload Management
+- AI Integrations
+- Transcript Generation
+- Color Correction Management
+- Music Management
+- Subtitle Generation
+- Rendering Orchestration
+- Export Management
 
 Suggested Structure:
 
@@ -726,18 +724,18 @@ All business logic must live in Django.
 
 Frontend responsibilities:
 
-* Display data
-* Handle interactions
-* Upload files
-* Poll task status
+- Display data
+- Handle interactions
+- Upload files
+- Poll task status
 
 Backend responsibilities:
 
-* AI operations
-* Video processing
-* Rendering
-* Business logic
-* File management
+- AI operations
+- Video processing
+- Rendering
+- Business logic
+- File management
 
 Business logic must never be duplicated in frontend.
 
@@ -749,18 +747,18 @@ Heavy operations must never run inside HTTP requests.
 
 Use:
 
-* Celery
-* Redis
+- Celery
+- Redis
 
 Background tasks:
 
-* Video merging
-* Transcript generation
-* Subtitle generation
-* Silence removal
-* Breath removal
-* Color/music suggestion generation
-* Export rendering
+- Video merging
+- Transcript generation
+- Subtitle generation
+- Silence removal
+- Breath removal
+- Color/music suggestion generation
+- Export rendering
 
 ---
 
@@ -782,13 +780,13 @@ class AIProvider:
 
 Current provider:
 
-* GapGPT
+- GapGPT
 
 Future providers:
 
-* OpenAI
-* Anthropic
-* Gemini
+- OpenAI
+- Anthropic
+- Gemini
 
 ---
 
@@ -798,13 +796,13 @@ Use S3-compatible object storage.
 
 Store:
 
-* Original clips
-* Source videos
-* Transcript files
-* Uploaded music files
-* Subtitle files
-* Exported videos
-* Temporary render files
+- Original clips
+- Source videos
+- Transcript files
+- Uploaded music files
+- Subtitle files
+- Exported videos
+- Temporary render files
 
 ---
 
@@ -814,13 +812,13 @@ Use FFmpeg.
 
 Responsibilities:
 
-* Clip merging
-* Cut generation
-* Silence removal
-* Color correction application
-* Background music mixing
-* Subtitle burn-in
-* Export generation
+- Clip merging
+- Cut generation
+- Silence removal
+- Color correction application
+- Background music mixing
+- Subtitle burn-in
+- Export generation
 
 ---
 
@@ -916,14 +914,14 @@ Frontend should always display current project state.
 
 MVP Authentication:
 
-* Email
-* Password
+- Email
+- Password
 
 Not required:
 
-* OAuth
-* Google Login
-* Social Login
+- OAuth
+- Google Login
+- Social Login
 
 Keep authentication simple.
 
@@ -933,24 +931,24 @@ Keep authentication simple.
 
 The following features must NOT be implemented in MVP:
 
-* Cover Generator
-* Thumbnail Generator
-* AI Avatars
-* AI Voice Cloning
-* AI B-Roll Generation
-* Stock Video Library
-* Multi-Track Editing
-* Advanced Effects
-* Cinematic filter packs
-* LUT marketplace
-* Motion Graphics
-* Collaboration
-* Team Workspaces
-* Organizations
-* Roles & Permissions
-* Social Media Publishing
-* Analytics
-* Mobile Applications
+- Cover Generator
+- Thumbnail Generator
+- AI Avatars
+- AI Voice Cloning
+- AI B-Roll Generation
+- Stock Video Library
+- Multi-Track Editing
+- Advanced Effects
+- Cinematic filter packs
+- LUT marketplace
+- Motion Graphics
+- Collaboration
+- Team Workspaces
+- Organizations
+- Roles & Permissions
+- Social Media Publishing
+- Analytics
+- Mobile Applications
 
 These features belong to future versions.
 

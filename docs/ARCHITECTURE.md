@@ -6,13 +6,13 @@ SipCut is a web-based AI-powered video editing platform.
 
 The architecture is designed around the following principles:
 
-* Backend-first architecture
-* Asynchronous video processing
-* Non-destructive editing
-* Scalable storage
-* AI provider abstraction
-* Mobile-friendly experience
-* Text-based editing as the primary workflow
+- Backend-first architecture
+- Asynchronous video processing
+- Non-destructive editing
+- Scalable storage via Arvan Cloud
+- AI provider abstraction
+- Mobile-friendly experience
+- Text-based editing as the primary workflow
 
 The system must prioritize simplicity and maintainability over feature richness.
 
@@ -37,9 +37,9 @@ The system must prioritize simplicity and maintainability over feature richness.
            │              │
            ▼              ▼
 
-┌─────────────────┐   ┌─────────────────┐
-│   PostgreSQL    │   │   S3 Storage    │
-└─────────────────┘   └─────────────────┘
+┌─────────────────┐   ┌──────────────────┐
+│   PostgreSQL    │   │  Arvan Cloud     │
+└─────────────────┘   └──────────────────┘
 
            │
            ▼
@@ -81,32 +81,32 @@ The system must prioritize simplicity and maintainability over feature richness.
 
 Technology:
 
-* Next.js
-* TypeScript
-* Tailwind CSS
-* ShadCN UI
+- Next.js
+- TypeScript
+- Tailwind CSS
+- ShadCN UI
 
 Responsibilities:
 
-* User Interface
-* Authentication UI
-* Dashboard
-* Script Assistant UI
-* Upload UI
-* Transcript Editor
-* Timeline UI
-* Light & Color UI
-* Music UI
-* Subtitle UI
-* Export UI
+- User Interface
+- Authentication UI
+- Dashboard
+- Script Assistant UI
+- Upload UI
+- Transcript Editor
+- Timeline UI
+- Light & Color UI
+- Music UI
+- Subtitle UI
+- Export UI
 
 The frontend must not contain business logic.
 
 The frontend should only:
 
-* Display data
-* Send commands
-* Show processing status
+- Display data
+- Send commands
+- Show processing status
 
 All important logic belongs to backend services.
 
@@ -116,21 +116,21 @@ All important logic belongs to backend services.
 
 Technology:
 
-* Django
-* Django REST Framework
+- Django
+- Django REST Framework
 
 Responsibilities:
 
-* Authentication
-* Authorization
-* Project Management
-* AI Integration
-* Transcript Management
-* Color Correction Management
-* Music Management
-* Export Management
-* File Management
-* Processing Orchestration
+- Authentication
+- Authorization
+- Project Management
+- AI Integration
+- Transcript Management
+- Color Correction Management
+- Music Management
+- Export Management
+- File Management
+- Processing Orchestration
 
 Suggested Structure:
 
@@ -157,19 +157,19 @@ apps/
 
 Technology:
 
-* PostgreSQL
+- PostgreSQL
 
 Stores:
 
-* Users
-* Projects
-* Scripts
-* Video Metadata
-* Transcript Metadata
-* Color Correction Profiles
-* Music Track Metadata
-* Export Metadata
-* Cleanup Operations
+- Users
+- Projects
+- Scripts
+- Video Metadata
+- Transcript Metadata
+- Color Correction Profiles
+- Music Track Metadata
+- Export Metadata
+- Cleanup Operations
 
 Database should never store video files.
 
@@ -181,13 +181,13 @@ Only metadata should be stored.
 
 Technology:
 
-* S3 Compatible Object Storage
+- S3 Compatible Object Storage
 
 Examples:
 
-* MinIO
-* Cloudflare R2
-* AWS S3
+- MinIO
+- Cloudflare R2
+- AWS S3
 
 Stores:
 
@@ -221,8 +221,8 @@ uploads/
 
 Technology:
 
-* Celery
-* Redis
+- Celery
+- Redis
 
 Purpose:
 
@@ -326,7 +326,7 @@ Final MP4
 
 Provider:
 
-* GapGPT
+- GapGPT
 
 The application must never depend directly on GapGPT.
 
@@ -374,7 +374,7 @@ Switching providers should not require application-wide changes.
 
 Technology:
 
-* FFmpeg
+- FFmpeg
 
 All video manipulation must be performed through FFmpeg.
 
@@ -568,10 +568,10 @@ Final Export
 
 Benefits:
 
-* Undo
-* Re-edit
-* Multiple exports
-* No quality loss
+- Undo
+- Re-edit
+- Multiple exports
+- No quality loss
 
 ---
 
@@ -639,18 +639,18 @@ Frontend should always display current status.
 
 Authentication:
 
-* JWT Authentication
+- JWT Authentication
 
 Passwords:
 
-* Hashed using Django's built-in password hashing
+- Hashed using Django's built-in password hashing
 
 Protected Resources:
 
-* Projects
-* Videos
-* Exports
-* Transcripts
+- Projects
+- Videos
+- Exports
+- Transcripts
 
 Users must only access their own resources.
 
@@ -662,14 +662,14 @@ The architecture should support future additions without major rewrites.
 
 Future Features:
 
-* Cover Generator
-* Team Workspaces
-* Analytics
-* AI B-Roll
-* AI Voice Tools
-* Mobile Apps
-* Advanced color grading
-* Multi-track audio editor
+- Cover Generator
+- Team Workspaces
+- Analytics
+- AI B-Roll
+- AI Voice Tools
+- Mobile Apps
+- Advanced color grading
+- Multi-track audio editor
 
 The MVP architecture should be built so these features can be added later without redesigning core systems.
 

@@ -4,8 +4,10 @@
 
 ```python
 id
-email
-password
+phone_number
+otp_code
+otp_expires_at
+otp_attempts
 created_at
 updated_at
 ```
@@ -113,8 +115,8 @@ created_at
 
 Types:
 
-* silence
-* breath
+- silence
+- breath
 
 ---
 
@@ -136,9 +138,9 @@ updated_at
 
 Source:
 
-* manual
-* preset
-* ai_suggested
+- manual
+- preset
+- ai_suggested
 
 ---
 
@@ -177,9 +179,9 @@ updated_at
 
 Source:
 
-* library
-* uploaded
-* ai_suggested
+- library
+- uploaded
+- ai_suggested
 
 ---
 

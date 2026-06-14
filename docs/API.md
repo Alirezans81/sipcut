@@ -10,7 +10,25 @@ Base URL
 
 # Authentication
 
-## Register
+## Send OTP
+
+POST
+
+```text
+/auth/send-otp/
+```
+
+Request:
+
+```json
+{
+  "phone_number": "+989xxxxxxxxx"
+}
+```
+
+---
+
+## Verify OTP & Register
 
 POST
 
@@ -22,14 +40,14 @@ Request:
 
 ```json
 {
-  "email": "",
-  "password": ""
+  "phone_number": "+989xxxxxxxxx",
+  "otp_code": "123456"
 }
 ```
 
 ---
 
-## Login
+## Verify OTP & Login
 
 POST
 
@@ -41,8 +59,8 @@ Request:
 
 ```json
 {
-  "email": "",
-  "password": ""
+  "phone_number": "+989xxxxxxxxx",
+  "otp_code": "123456"
 }
 ```
 
