@@ -1,0 +1,23 @@
+# Python / Django
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+backend/.env
+backend/media/
+backend/staticfiles/
+backend/requirements.lock.txt
+
+# Node / Next.js
+node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env.local
+*.tsbuildinfo
+next-env.d.ts
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.log

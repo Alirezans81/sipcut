@@ -109,14 +109,35 @@ Border Strong: #4B5563
 
 ## Font
 
+SipCut is a Persian-first platform, so the type system uses two fonts:
+
+- **Vazir** — the default typeface for the whole app (Persian-first). Clean and
+  modern; self-hosted from `frontend/public/fonts/` and loaded via
+  `next/font/local`. Applied by default through the `font-sans` utility.
+- **Inter** — Latin typeface (Google Fonts). Opt-in for English / Latin text via
+  the `font-eng` utility (e.g. the "SipCut" wordmark, brand names, code-like
+  tokens).
+
+By default everything renders in Vazir. Apply `font-eng` to an element to switch
+it (and its children) to Inter.
+
 ```txt
-Inter
+Default (font-sans):  Vazir
+English (font-eng):   Inter, ui-sans-serif, system-ui, sans-serif
 ```
 
-Fallback:
+### Weights
+
+Vazir is self-hosted across six weights, so the font-weight utilities below map
+to real font files (no faux bold):
 
 ```txt
-Inter, system-ui, sans-serif
+Thin    100
+Light   300
+Regular 400
+Medium  500
+Bold    700
+Black   900
 ```
 
 ---

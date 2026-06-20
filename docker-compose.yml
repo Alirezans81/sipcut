@@ -1,0 +1,103 @@
+# SipCut local development stack (full project, hot reload).
+#
+#   docker compose up --build
+#
+# Brings up PostgreSQL, Redis, the Django API, a Celery worker, and the Next.js
+# frontend. Backend env is read from backend/.env if present (copy from
+# backend/.env.example) — the compose-level overrides below cover the essentials.
+#
+#   Frontend: http://localhost:3000
+#   API:      http://localhost:8000/api/v1/health/
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: sipcut
+      POSTGRES_PASSWORD: sipcut
+      POSTGRES_DB: sipcut
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sipcut"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: ./backend
+    # Dev server with Django's autoreloader (picks up code changes via the mount).
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - path: ./backend/.env
+        required: false
+    environment:
+      # Resolve services inside the compose network and allow the dev server hosts.
+      DJANGO_DEBUG: "true"
+      DJANGO_ALLOWED_HOSTS: localhost,127.0.0.1,web
+      DATABASE_URL: postgres://sipcut:sipcut@db:5432/sipcut
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build: ./backend
+    command: celery -A config worker --loglevel=info
+    volumes:
+      - ./backend:/app
+    env_file:
+      - path: ./backend/.env
+        required: false
+    environment:
+      DATABASE_URL: postgres://sipcut:sipcut@db:5432/sipcut
+      CELERY_BROKER_URL: redis://redis:6379/0
+      CELERY_RESULT_BACKEND: redis://redis:6379/1
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    command: npm run dev
+    # Bind-mount source for hot reload, but keep the container's own (Linux)
+    # node_modules and .next via anonymous volumes so host artifacts never leak in.
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    environment:
+      # The browser runs on the host, so it reaches the API via published port.
+      NEXT_PUBLIC_API_URL: http://localhost:8000/api/v1
+      # Reliable file watching for bind mounts on Windows/macOS.
+      WATCHPACK_POLLING: "true"
+    depends_on:
+      - web
+
+volumes:
+  postgres_data:
