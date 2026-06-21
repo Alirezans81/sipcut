@@ -265,6 +265,18 @@ else:
 # ---------------------------------------------------------------------------
 # AI provider abstraction (see docs/ARCHITECTURE.md — AI Layer)
 # ---------------------------------------------------------------------------
+# ---------------------------------------------------------------------------
+# Uploads
+# ---------------------------------------------------------------------------
+MAX_UPLOAD_SIZE_MB = env.int("MAX_UPLOAD_SIZE_MB", default=200)
+ALLOWED_VIDEO_EXTENSIONS = env.list(
+    "ALLOWED_VIDEO_EXTENSIONS",
+    default=[".mp4", ".mov", ".webm", ".m4v", ".avi", ".mkv"],
+)
+
+# ---------------------------------------------------------------------------
+# AI provider abstraction (continued)
+# ---------------------------------------------------------------------------
 AI_PROVIDER = env("AI_PROVIDER", default="gapgpt")
 GAPGPT_API_KEY = env("GAPGPT_API_KEY", default="")
 GAPGPT_BASE_URL = env("GAPGPT_BASE_URL", default="https://api.gapgpt.app/v1")

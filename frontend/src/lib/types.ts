@@ -26,6 +26,15 @@ export interface Project {
   updated_at: string;
 }
 
+export interface Video {
+  id: string;
+  name: string;
+  url: string;
+  duration: number;
+  order: number;
+  created_at: string;
+}
+
 export interface Script {
   id: string;
   title: string;
