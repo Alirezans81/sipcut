@@ -268,6 +268,9 @@ else:
 AI_PROVIDER = env("AI_PROVIDER", default="gapgpt")
 GAPGPT_API_KEY = env("GAPGPT_API_KEY", default="")
 GAPGPT_BASE_URL = env("GAPGPT_BASE_URL", default="https://api.gapgpt.app/v1")
+GAPGPT_MODEL = env("GAPGPT_MODEL", default="gpt-4o-mini")
+# Seconds to wait on a single AI HTTP call before failing.
+AI_TIMEOUT = env.int("AI_TIMEOUT", default=30)
 
 # ---------------------------------------------------------------------------
 # Logging

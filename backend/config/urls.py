@@ -17,7 +17,8 @@ api_v1_patterns = [
     path("health/", health, name="health"),
     path("auth/", include("apps.accounts.urls")),
     path("", include("apps.projects.urls")),
-    # Epic 4+ route modules are mounted here.
+    path("", include("apps.scripts.urls")),
+    # Epic 5+ route modules are mounted here.
 ]
 
 urlpatterns = [

@@ -26,6 +26,17 @@ export interface Project {
   updated_at: string;
 }
 
+export interface Script {
+  id: string;
+  title: string;
+  hook: string;
+  script: string;
+  shot_list: string[];
+  cta: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface AuthTokens {
   access: string;
   refresh: string;

@@ -14,7 +14,11 @@ class AIProvider(abc.ABC):
 
     @abc.abstractmethod
     def generate_script(self, prompt: str) -> dict[str, Any]:
-        """Return a structured script: title, hook, script, shotList, cta."""
+        """Return a structured script.
+
+        Keys: ``title``, ``hook``, ``script`` (str), ``shot_list`` (list[str]),
+        ``cta`` (str). Content is in Persian.
+        """
 
     @abc.abstractmethod
     def generate_transcript(self, audio_path: str) -> list[dict[str, Any]]:

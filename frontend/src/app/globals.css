@@ -89,6 +89,7 @@
   --destructive: #ef4444;
 
   --border: #374151;
+  --border-strong: #4b5563;
   --input: #374151;
   --ring: #6366f1;
 
@@ -129,4 +130,42 @@
   html {
     @apply font-sans;
   }
+}
+
+/*
+ * Custom scrollbars — subtle, rounded, on-theme (docs/UI.md).
+ * Kept OUTSIDE @layer so these unlayered rules win over the browser's default
+ * scrollbar styling (layered rules can lose the cascade and fall back to native).
+ */
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+/* WebKit / Chromium */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  /* The transparent border + padding-box clip makes the thumb look slim and
+     "floating", leaving breathing room around it. */
+  background-color: var(--border-strong);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--muted-foreground);
+}
+/* Remove the up/down arrow buttons. */
+::-webkit-scrollbar-button {
+  display: none;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
