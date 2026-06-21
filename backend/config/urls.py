@@ -16,8 +16,8 @@ def health(_request):
 api_v1_patterns = [
     path("health/", health, name="health"),
     path("auth/", include("apps.accounts.urls")),
-    # Epic 3+ route modules are mounted here, e.g.:
-    # path("projects/", include("apps.projects.urls")),
+    path("", include("apps.projects.urls")),
+    # Epic 4+ route modules are mounted here.
 ]
 
 urlpatterns = [
