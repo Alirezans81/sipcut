@@ -182,6 +182,7 @@ function UploadWorkspace() {
 
         <div className="mt-8 flex justify-end">
           <Button
+            className="w-full md:w-auto"
             disabled={clipCount === 0 || uploading > 0}
             onClick={() =>
               toast.info("ادغام و پردازش در مرحله بعدی اضافه می‌شوند.")
