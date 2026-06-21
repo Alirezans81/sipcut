@@ -108,22 +108,28 @@ Users should be able to complete the entire workflow from a mobile browser.
 
 Allow users to access their projects.
 
-## Actions
+## Method
+
+Passwordless authentication via phone number + one-time password (OTP).
 
 Login
 
 ```text
-Email
-Password
+Phone Number
+↓
+Enter OTP
 ```
 
 Register
 
 ```text
-Email
-Password
-Confirm Password
+Phone Number
+↓
+Enter OTP
 ```
+
+Both flows share a single "send OTP" step; register is for new numbers, login is
+for already-verified ones.
 
 ## Success
 

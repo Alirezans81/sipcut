@@ -859,7 +859,7 @@ Frontend should always display current project state.
 ```json
 {
   "id": "",
-  "email": "",
+  "phone_number": "",
   "createdAt": ""
 }
 ```
@@ -914,8 +914,11 @@ Frontend should always display current project state.
 
 MVP Authentication:
 
-- Email
-- Password
+- Phone number
+- One-time password (OTP)
+
+Passwordless: users receive an OTP via SMS to register and log in. JWT tokens are
+issued on successful verification.
 
 Not required:
 

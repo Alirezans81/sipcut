@@ -170,10 +170,13 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_CLASSES": (
         "rest_framework.throttling.UserRateThrottle",
         "rest_framework.throttling.AnonRateThrottle",
+        "rest_framework.throttling.ScopedRateThrottle",
     ),
     "DEFAULT_THROTTLE_RATES": {
         "user": env("THROTTLE_USER", default="1000/day"),
         "anon": env("THROTTLE_ANON", default="100/day"),
+        # Applied to views that set throttle_scope (e.g. OTP send/verify).
+        "otp": env("THROTTLE_OTP", default="5/min"),
     },
 }
 
@@ -188,6 +191,16 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
+
+# ---------------------------------------------------------------------------
+# OTP authentication (phone + one-time password — see docs/API.md)
+# ---------------------------------------------------------------------------
+OTP_LENGTH = env.int("OTP_LENGTH", default=6)
+OTP_TTL_SECONDS = env.int("OTP_TTL_SECONDS", default=120)
+OTP_MAX_ATTEMPTS = env.int("OTP_MAX_ATTEMPTS", default=5)
+# In development we can't send real SMS; expose the code in the API response so
+# the flow is testable. Never enable this in production.
+OTP_DEBUG_RETURN = env.bool("OTP_DEBUG_RETURN", default=DEBUG)
 
 # ---------------------------------------------------------------------------
 # CORS (frontend lives on a separate origin)
