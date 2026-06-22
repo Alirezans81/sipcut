@@ -3,19 +3,21 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Loader2, Redo2, Undo2 } from "lucide-react";
+import { ArrowRight, Loader2, Redo2, Sparkles, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { RequireAuth } from "@/components/auth/require-auth";
 import { AppHeader } from "@/components/app-header";
 import { TranscriptEditor } from "@/components/transcripts/transcript-editor";
 import { Timeline } from "@/components/transcripts/timeline";
+import { CleanupDialog } from "@/components/cleanup/cleanup-dialog";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ApiError } from "@/lib/api-client";
 import { useAuth } from "@/lib/auth-context";
 import { getProcessing } from "@/lib/processing-api";
+import { getCleanup } from "@/lib/cleanup-api";
 import { updateTranscript } from "@/lib/transcript-api";
-import type { TranscriptSegment } from "@/lib/types";
+import type { CleanupOperation, TranscriptSegment } from "@/lib/types";
 
 interface History {
   stack: TranscriptSegment[][];
@@ -37,6 +39,8 @@ function EditorWorkspace() {
   const [saving, setSaving] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
+  const [cleanup, setCleanup] = useState<CleanupOperation[]>([]);
+  const [cleanupOpen, setCleanupOpen] = useState(false);
   const [state, setState] = useState<"loading" | "ready" | "unavailable">(
     "loading",
   );
@@ -76,6 +80,13 @@ function EditorWorkspace() {
         if (!bounceTo401(err)) setState("unavailable");
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [projectId]);
+
+  useEffect(() => {
+    if (!projectId) return;
+    getCleanup(projectId)
+      .then((s) => setCleanup(s.operations))
+      .catch(() => {});
   }, [projectId]);
 
   async function persist(next: TranscriptSegment[]) {
@@ -160,6 +171,16 @@ function EditorWorkspace() {
       return;
     }
 
+    // Also skip auto-cleanup regions (silences / breaths) during preview.
+    const inCleanup = cleanup.find(
+      (c) => t >= c.start_time && t < c.end_time,
+    );
+    if (inCleanup) {
+      v.currentTime = inCleanup.end_time;
+      setCurrentTime(inCleanup.end_time);
+      return;
+    }
+
     setCurrentTime(t);
     const active = segments.find((s) => t >= s.start_time && t < s.end_time);
     setActiveId(active ? active.id : null);
@@ -231,6 +252,14 @@ function EditorWorkspace() {
                 >
                   <Redo2 className="size-4" />
                 </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setCleanupOpen(true)}
+                >
+                  <Sparkles className="size-4" />
+                  پاک‌سازی
+                </Button>
               </div>
             </div>
 
@@ -265,11 +294,19 @@ function EditorWorkspace() {
             <div className="shrink-0">
               <Timeline
                 segments={segments}
+                cleanup={cleanup}
                 duration={duration}
                 currentTime={currentTime}
                 onSeek={seekTo}
               />
             </div>
+
+            <CleanupDialog
+              projectId={projectId}
+              open={cleanupOpen}
+              onOpenChange={setCleanupOpen}
+              onChange={setCleanup}
+            />
           </>
         )}
       </section>

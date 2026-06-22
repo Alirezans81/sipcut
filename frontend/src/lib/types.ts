@@ -75,6 +75,26 @@ export interface Transcript {
   segments: TranscriptSegment[];
 }
 
+/** A time region cut by auto-cleanup — a silence or a long breath (Epic 9). */
+export interface CleanupOperation {
+  id: string;
+  type: "silence" | "breath";
+  start_time: number;
+  end_time: number;
+  created_at: string;
+}
+
+export interface CleanupSummary {
+  silence_count: number;
+  breath_count: number;
+  total_seconds: number;
+}
+
+export interface CleanupState {
+  operations: CleanupOperation[];
+  summary: CleanupSummary;
+}
+
 export interface ProcessingState {
   status: ProjectStatus;
   timeline: Timeline;

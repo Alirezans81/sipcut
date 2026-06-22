@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 import subprocess
 from pathlib import Path
 
@@ -126,3 +127,39 @@ def extract_audio(video: str | Path, output: str | Path) -> None:
             str(output),
         ]
     )
+
+
+def detect_silences(
+    path: str | Path,
+    noise_db: float = -30.0,
+    min_silence: float = 0.25,
+) -> list[dict[str, float]]:
+    """Find quiet regions in a media file via FFmpeg's ``silencedetect``.
+
+    Returns a list of ``{"start", "end"}`` (seconds). These are the basis for
+    silence/breath cleanup — the caller classifies them by length. The original
+    media is never modified (docs/ARCHITECTURE.md — non-destructive editing).
+    """
+    proc = _run(
+        [
+            "ffmpeg",
+            "-hide_banner",
+            "-nostats",
+            "-i",
+            str(path),
+            "-af",
+            f"silencedetect=noise={noise_db}dB:d={min_silence}",
+            "-f",
+            "null",
+            "-",
+        ]
+    )
+    # silencedetect reports on stderr: "silence_start: X" / "silence_end: Y ...".
+    starts = [float(m) for m in re.findall(r"silence_start:\s*([0-9.]+)", proc.stderr)]
+    ends = [float(m) for m in re.findall(r"silence_end:\s*([0-9.]+)", proc.stderr)]
+
+    regions: list[dict[str, float]] = []
+    for start, end in zip(starts, ends):
+        if end > start:
+            regions.append({"start": round(start, 3), "end": round(end, 3)})
+    return regions

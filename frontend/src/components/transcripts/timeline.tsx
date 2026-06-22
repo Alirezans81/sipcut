@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils";
 import { formatDuration } from "@/lib/media";
-import type { TranscriptSegment } from "@/lib/types";
+import type { CleanupOperation, TranscriptSegment } from "@/lib/types";
 
 /**
  * Visual-feedback timeline (docs/USER_JOURNEY.md — Timeline). Not a professional
@@ -12,11 +12,13 @@ import type { TranscriptSegment } from "@/lib/types";
  */
 export function Timeline({
   segments,
+  cleanup = [],
   duration,
   currentTime,
   onSeek,
 }: {
   segments: TranscriptSegment[];
+  cleanup?: CleanupOperation[];
   duration: number;
   currentTime: number;
   onSeek: (time: number) => void;
@@ -73,6 +75,16 @@ export function Timeline({
           );
         })}
 
+        {/* Auto-cleanup cuts (silences / breaths) — thin markers over the track. */}
+        {cleanup.map((op) => (
+          <div
+            key={op.id}
+            className="pointer-events-none absolute inset-y-0 z-5 border-x border-warning/60 bg-warning/30"
+            style={{ left: pct(op.start_time), width: pct(op.end_time - op.start_time) }}
+            title={op.type === "silence" ? "سکوت حذف‌شده" : "مکث حذف‌شده"}
+          />
+        ))}
+
         {/* Playhead */}
         <div
           className="pointer-events-none absolute inset-y-0 z-10 w-0.5 -translate-x-1/2 bg-foreground"
@@ -107,6 +119,12 @@ export function Timeline({
             <span className="size-2 rounded-sm border border-destructive/50 bg-destructive/20" />
             حذف‌شده
           </span>
+          {cleanup.length > 0 && (
+            <span className="flex items-center gap-1">
+              <span className="size-2 rounded-sm border border-warning/60 bg-warning/30" />
+              پاک‌سازی
+            </span>
+          )}
           <span className="flex items-center gap-1">
             <span className="size-2 rounded-full bg-info/70" />
             زیرنویس

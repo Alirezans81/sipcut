@@ -62,6 +62,7 @@ LOCAL_APPS = [
     "apps.scripts",
     "apps.videos",
     "apps.transcripts",
+    "apps.cleanup",
     "apps.colors",
     "apps.music",
     "apps.subtitles",
@@ -276,6 +277,15 @@ ALLOWED_VIDEO_EXTENSIONS = env.list(
     "ALLOWED_VIDEO_EXTENSIONS",
     default=[".mp4", ".mov", ".webm", ".m4v", ".avi", ".mkv"],
 )
+
+# ---------------------------------------------------------------------------
+# Auto cleanup (Epic 9) — silence/breath detection thresholds
+# ---------------------------------------------------------------------------
+# Quiet is anything below this loudness; longer gaps are silences, shorter ones
+# are treated as breaths/pauses (a pragmatic heuristic for the MVP).
+CLEANUP_NOISE_DB = env.float("CLEANUP_NOISE_DB", default=-30.0)
+CLEANUP_SILENCE_MIN_SECONDS = env.float("CLEANUP_SILENCE_MIN_SECONDS", default=0.6)
+CLEANUP_BREATH_MIN_SECONDS = env.float("CLEANUP_BREATH_MIN_SECONDS", default=0.25)
 
 # ---------------------------------------------------------------------------
 # AI provider abstraction (continued)
