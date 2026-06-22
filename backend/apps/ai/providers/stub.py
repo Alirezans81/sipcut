@@ -30,7 +30,22 @@ class StubProvider(AIProvider):
         }
 
     def generate_transcript(self, audio_path: str) -> list[dict[str, Any]]:
-        raise NotImplementedError("Implemented in Epic 6: Processing Pipeline")
+        # Offline placeholder: deterministic Persian segments so the full editing
+        # flow works without a real speech-to-text service. Spaced ~3s apart.
+        sentences = [
+            "سلام! به این ویدیو خوش اومدید.",
+            "تو این قسمت می‌خوام یه نکته مهم رو باهاتون در میون بذارم.",
+            "اول از همه، بذارید مشکل اصلی رو توضیح بدم.",
+            "حالا بریم سراغ راهکاری که واقعاً جواب می‌ده.",
+            "اگه این ویدیو براتون مفید بود، حتماً فالو کنید و ذخیره‌ش کنید.",
+        ]
+        segments: list[dict[str, Any]] = []
+        cursor = 0.0
+        for text in sentences:
+            duration = 3.0
+            segments.append({"text": text, "start": cursor, "end": cursor + duration})
+            cursor += duration
+        return segments
 
     def suggest_color_profile(self, context: dict[str, Any]) -> dict[str, Any]:
         raise NotImplementedError("Implemented in Epic 11: Light & Color")

@@ -46,6 +46,33 @@ export interface Script {
   updated_at: string;
 }
 
+/** A line of transcript tied to a span of the merged source video (Epic 6). */
+export interface TranscriptSegment {
+  id: string;
+  text: string;
+  start_time: number;
+  end_time: number;
+  deleted: boolean;
+  order: number;
+}
+
+export interface SourceVideo {
+  url: string;
+  duration: number;
+}
+
+/** The editor read model: merged video plus its ordered transcript segments. */
+export interface Timeline {
+  duration: number;
+  source_video: SourceVideo | null;
+  segments: TranscriptSegment[];
+}
+
+export interface ProcessingState {
+  status: ProjectStatus;
+  timeline: Timeline;
+}
+
 export interface AuthTokens {
   access: string;
   refresh: string;

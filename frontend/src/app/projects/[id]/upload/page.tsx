@@ -22,6 +22,7 @@ import {
   reorderVideos,
   uploadVideo,
 } from "@/lib/videos-api";
+import { startProcessing } from "@/lib/processing-api";
 import type { Video } from "@/lib/types";
 
 function UploadWorkspace() {
@@ -32,6 +33,7 @@ function UploadWorkspace() {
 
   const [videos, setVideos] = useState<Video[] | null>(null);
   const [uploading, setUploading] = useState(0);
+  const [starting, setStarting] = useState(false);
 
   const bounceTo401 = (err: unknown) => {
     if (err instanceof ApiError && err.status === 401) {
@@ -121,6 +123,23 @@ function UploadWorkspace() {
     }
   }
 
+  async function handleContinue() {
+    setStarting(true);
+    try {
+      await startProcessing(projectId);
+      router.push(`/projects/${projectId}/processing`);
+    } catch (err) {
+      setStarting(false);
+      if (!bounceTo401(err)) {
+        toast.error(
+          err instanceof ApiError && err.status === 400
+            ? "برای ادامه حداقل یک کلیپ لازم است."
+            : "شروع پردازش ناموفق بود.",
+        );
+      }
+    }
+  }
+
   const clipCount = videos?.length ?? 0;
 
   return (
@@ -183,12 +202,11 @@ function UploadWorkspace() {
         <div className="mt-8 flex justify-end">
           <Button
             className="w-full md:w-auto"
-            disabled={clipCount === 0 || uploading > 0}
-            onClick={() =>
-              toast.info("ادغام و پردازش در مرحله بعدی اضافه می‌شوند.")
-            }
+            disabled={clipCount === 0 || uploading > 0 || starting}
+            onClick={handleContinue}
           >
-            ادامه
+            {starting && <Loader2 className="size-4 animate-spin" />}
+            ادامه و پردازش
           </Button>
         </div>
       </section>

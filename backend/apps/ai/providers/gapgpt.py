@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import json
 import logging
+from pathlib import Path
 from typing import Any
 
 import requests
@@ -65,7 +66,28 @@ class GapGPTProvider(AIProvider):
         return _normalize_script(data)
 
     def generate_transcript(self, audio_path: str) -> list[dict[str, Any]]:
-        raise NotImplementedError("Implemented in Epic 6: Processing Pipeline")
+        # GapGPT is OpenAI-compatible, so use the Whisper transcription endpoint
+        # with verbose_json to get per-segment timestamps.
+        try:
+            with open(audio_path, "rb") as audio:
+                resp = requests.post(
+                    f"{self.base_url}/audio/transcriptions",
+                    headers={"Authorization": f"Bearer {self.api_key}"},
+                    files={"file": (Path(audio_path).name, audio, "audio/wav")},
+                    data={
+                        "model": settings.GAPGPT_TRANSCRIBE_MODEL,
+                        "response_format": "verbose_json",
+                        "language": "fa",
+                    },
+                    timeout=self.timeout,
+                )
+            resp.raise_for_status()
+            data = resp.json()
+        except (requests.RequestException, ValueError) as exc:
+            logger.exception("GapGPT transcription failed")
+            raise AIProviderError("تولید متن گفتار با خطا مواجه شد.") from exc
+
+        return _normalize_segments(data)
 
     def suggest_color_profile(self, context: dict[str, Any]) -> dict[str, Any]:
         raise NotImplementedError("Implemented in Epic 11: Light & Color")
@@ -86,3 +108,21 @@ def _normalize_script(data: dict[str, Any]) -> dict[str, Any]:
         "shot_list": [str(s).strip() for s in shot_list if str(s).strip()],
         "cta": str(data.get("cta", "")).strip(),
     }
+
+
+def _normalize_segments(data: dict[str, Any]) -> list[dict[str, Any]]:
+    """Coerce a Whisper ``verbose_json`` response into our segment contract."""
+    segments = data.get("segments") or []
+    normalized: list[dict[str, Any]] = []
+    for seg in segments:
+        text = str(seg.get("text", "")).strip()
+        if not text:
+            continue
+        normalized.append(
+            {
+                "text": text,
+                "start": float(seg.get("start", 0) or 0),
+                "end": float(seg.get("end", 0) or 0),
+            }
+        )
+    return normalized

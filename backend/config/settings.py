@@ -225,6 +225,9 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 # Heavy media operations can run long; cap to a generous hour by default.
 CELERY_TASK_TIME_LIMIT = env.int("CELERY_TASK_TIME_LIMIT", default=60 * 60)
+# Run tasks inline (no worker/broker) — handy for tests and simple local runs.
+CELERY_TASK_ALWAYS_EAGER = env.bool("CELERY_TASK_ALWAYS_EAGER", default=False)
+CELERY_TASK_EAGER_PROPAGATES = True
 
 # ---------------------------------------------------------------------------
 # Storage (S3-compatible — Arvan Cloud)
@@ -281,6 +284,8 @@ AI_PROVIDER = env("AI_PROVIDER", default="gapgpt")
 GAPGPT_API_KEY = env("GAPGPT_API_KEY", default="")
 GAPGPT_BASE_URL = env("GAPGPT_BASE_URL", default="https://api.gapgpt.app/v1")
 GAPGPT_MODEL = env("GAPGPT_MODEL", default="gpt-4o-mini")
+# Whisper-compatible speech-to-text model used to generate transcripts (Epic 6).
+GAPGPT_TRANSCRIBE_MODEL = env("GAPGPT_TRANSCRIBE_MODEL", default="whisper-1")
 # Seconds to wait on a single AI HTTP call before failing.
 AI_TIMEOUT = env.int("AI_TIMEOUT", default=30)
 

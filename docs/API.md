@@ -172,6 +172,54 @@ POST
 
 ---
 
+# Processing
+
+## Start Processing
+
+POST
+
+```text
+/projects/{id}/process/
+```
+
+Enqueues the async pipeline (merge clips → generate transcript). Moves the
+project to `PROCESSING` and returns `202` with the current processing state.
+
+---
+
+## Processing Status
+
+GET
+
+```text
+/projects/{id}/processing/
+```
+
+Polled by the processing screen. Returns the project status plus the timeline
+once it is ready:
+
+```json
+{
+  "status": "READY_FOR_EDITING",
+  "timeline": {
+    "duration": 12.5,
+    "source_video": { "url": "", "duration": 12.5 },
+    "segments": [
+      {
+        "id": "",
+        "text": "",
+        "start_time": 0.0,
+        "end_time": 3.0,
+        "deleted": false,
+        "order": 0
+      }
+    ]
+  }
+}
+```
+
+---
+
 # Transcript
 
 ## Get Transcript

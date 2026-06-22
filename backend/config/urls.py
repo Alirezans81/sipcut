@@ -21,7 +21,8 @@ api_v1_patterns = [
     path("", include("apps.projects.urls")),
     path("", include("apps.scripts.urls")),
     path("", include("apps.videos.urls")),
-    # Epic 6+ route modules are mounted here.
+    path("", include("apps.transcripts.urls")),
+    # Epic 7+ route modules are mounted here.
 ]
 
 urlpatterns = [
