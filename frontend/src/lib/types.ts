@@ -68,6 +68,13 @@ export interface Timeline {
   segments: TranscriptSegment[];
 }
 
+/** Full transcript with its segments — the editable source of truth (Epic 7). */
+export interface Transcript {
+  id: string;
+  created_at: string;
+  segments: TranscriptSegment[];
+}
+
 export interface ProcessingState {
   status: ProjectStatus;
   timeline: Timeline;

@@ -52,6 +52,30 @@ def generate_project_transcript(project: Project) -> Transcript:
     return transcript
 
 
+def apply_transcript_edits(transcript: Transcript, edits: list[dict]) -> Transcript:
+    """Persist text/deleted changes to a transcript's segments (Epic 7).
+
+    Edits are keyed by segment id; ids that don't belong to this transcript are
+    ignored. Only fields present in each edit are touched, and only when they
+    actually change — keeping ``updated_at`` meaningful.
+    """
+    segments = {str(s.id): s for s in transcript.segments.all()}
+    for edit in edits:
+        segment = segments.get(str(edit["id"]))
+        if segment is None:
+            continue
+        changed: list[str] = []
+        if "text" in edit and segment.text != edit["text"]:
+            segment.text = edit["text"]
+            changed.append("text")
+        if "deleted" in edit and segment.deleted != edit["deleted"]:
+            segment.deleted = edit["deleted"]
+            changed.append("deleted")
+        if changed:
+            segment.save(update_fields=changed + ["updated_at"])
+    return transcript
+
+
 def build_timeline(project: Project, request=None) -> dict:
     """Assemble timeline data: the source video plus its ordered segments.
 

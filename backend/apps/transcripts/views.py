@@ -1,7 +1,9 @@
-"""Processing API — trigger the pipeline and read its progress (Epic 6).
+"""Processing + transcript API (Epics 6 & 7).
 
-    POST /projects/{id}/process/      start merge + transcript
-    GET  /projects/{id}/processing/   status + timeline (source video + segments)
+    POST  /projects/{id}/process/      start merge + transcript
+    GET   /projects/{id}/processing/   status + timeline (source video + segments)
+    GET   /projects/{id}/transcript/   read the transcript + segments
+    PATCH /projects/{id}/transcript/   persist segment edits (text / deleted)
 """
 from __future__ import annotations
 
@@ -14,8 +16,13 @@ from rest_framework.views import APIView
 from apps.projects.models import Project
 from apps.projects.services import start_processing
 
-from .serializers import ProcessingStatusSerializer
-from .services import build_timeline
+from .models import Transcript
+from .serializers import (
+    ProcessingStatusSerializer,
+    TranscriptSerializer,
+    TranscriptUpdateSerializer,
+)
+from .services import apply_transcript_edits, build_timeline
 
 
 class _ProjectScopedView(APIView):
@@ -48,3 +55,23 @@ class ProcessingStatusView(_ProjectScopedView):
     def get(self, request, project_id):
         project = self.get_project(project_id)
         return Response(ProcessView._payload(request, project))
+
+
+class TranscriptView(_ProjectScopedView):
+    """Read and edit a project's transcript — the source of truth for editing."""
+
+    def get_transcript(self, project_id) -> Transcript:
+        project = self.get_project(project_id)
+        return get_object_or_404(Transcript, project=project)
+
+    def get(self, request, project_id):
+        transcript = self.get_transcript(project_id)
+        return Response(TranscriptSerializer(transcript).data)
+
+    def patch(self, request, project_id):
+        transcript = self.get_transcript(project_id)
+        serializer = TranscriptUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        apply_transcript_edits(transcript, serializer.validated_data["segments"])
+        transcript.refresh_from_db()
+        return Response(TranscriptSerializer(transcript).data)

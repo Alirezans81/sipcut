@@ -61,7 +61,7 @@ function ProcessingScreen() {
         setState(next);
 
         if (next.status === "READY_FOR_EDITING") {
-          router.replace(`/projects/${projectId}`);
+          router.replace(`/projects/${projectId}/edit`);
           return;
         }
         if (next.status.startsWith("FAILED")) {

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Loader2, Upload } from "lucide-react";
+import { ArrowRight, Loader2, Pencil, Upload } from "lucide-react";
 
 import { RequireAuth } from "@/components/auth/require-auth";
 import { AppHeader } from "@/components/app-header";
@@ -73,13 +73,25 @@ function ProjectWorkspace() {
               </div>
               <div className="flex items-center gap-3">
                 <StatusBadge status={project.status} />
-                <Link
-                  href={`/projects/${project.id}/upload`}
-                  className={buttonVariants({ variant: "secondary", size: "sm" })}
-                >
-                  <Upload className="size-4" />
-                  آپلود کلیپ‌ها
-                </Link>
+                {["READY_FOR_EDITING", "EXPORTING", "COMPLETED"].includes(
+                  project.status,
+                ) ? (
+                  <Link
+                    href={`/projects/${project.id}/edit`}
+                    className={buttonVariants({ variant: "default", size: "sm" })}
+                  >
+                    <Pencil className="size-4" />
+                    ویرایشگر
+                  </Link>
+                ) : (
+                  <Link
+                    href={`/projects/${project.id}/upload`}
+                    className={buttonVariants({ variant: "secondary", size: "sm" })}
+                  >
+                    <Upload className="size-4" />
+                    آپلود کلیپ‌ها
+                  </Link>
+                )}
               </div>
             </div>
             <ScriptAssistant projectId={project.id} />

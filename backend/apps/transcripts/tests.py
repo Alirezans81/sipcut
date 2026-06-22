@@ -163,3 +163,95 @@ class ProcessingPipelineTests(APITestCase):
             self.client.get(self._status_url()).status_code,
             status.HTTP_401_UNAUTHORIZED,
         )
+
+
+class TranscriptEditorTests(APITestCase):
+    """Epic 7 — read and persist edits to the transcript."""
+
+    def setUp(self):
+        self.user = User.objects.create_user(phone_number="+989120000001", is_verified=True)
+        self.other = User.objects.create_user(phone_number="+989120000002", is_verified=True)
+        self.project = Project.objects.create(user=self.user, title="Reel")
+        self.transcript = Transcript.objects.create(project=self.project)
+        self.seg_a = TranscriptSegment.objects.create(
+            transcript=self.transcript, text="جمله اول", start_time=0, end_time=3, order=0
+        )
+        self.seg_b = TranscriptSegment.objects.create(
+            transcript=self.transcript, text="جمله دوم", start_time=3, end_time=6, order=1
+        )
+        self.client.force_authenticate(self.user)
+
+    def _url(self, pid=None):
+        return reverse("v1:transcripts:transcript", args=[pid or self.project.id])
+
+    def test_get_returns_ordered_segments(self):
+        res = self.client.get(self._url())
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        texts = [s["text"] for s in res.data["segments"]]
+        self.assertEqual(texts, ["جمله اول", "جمله دوم"])
+
+    def test_get_404_when_no_transcript(self):
+        empty = Project.objects.create(user=self.user, title="Empty")
+        res = self.client.get(self._url(empty.id))
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_patch_deletes_segment(self):
+        res = self.client.patch(
+            self._url(),
+            {"segments": [{"id": str(self.seg_b.id), "deleted": True}]},
+            format="json",
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.seg_b.refresh_from_db()
+        self.assertTrue(self.seg_b.deleted)
+        self.seg_a.refresh_from_db()
+        self.assertFalse(self.seg_a.deleted)
+
+    def test_patch_edits_text_and_restores(self):
+        self.seg_a.deleted = True
+        self.seg_a.save(update_fields=["deleted"])
+        res = self.client.patch(
+            self._url(),
+            {
+                "segments": [
+                    {"id": str(self.seg_a.id), "text": "متن اصلاح‌شده", "deleted": False}
+                ]
+            },
+            format="json",
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.seg_a.refresh_from_db()
+        self.assertEqual(self.seg_a.text, "متن اصلاح‌شده")
+        self.assertFalse(self.seg_a.deleted)
+
+    def test_patch_ignores_segments_from_other_transcripts(self):
+        stranger = Transcript.objects.create(
+            project=Project.objects.create(user=self.other, title="Theirs")
+        )
+        foreign = TranscriptSegment.objects.create(
+            transcript=stranger, text="بیگانه", start_time=0, end_time=1, order=0
+        )
+        res = self.client.patch(
+            self._url(),
+            {"segments": [{"id": str(foreign.id), "deleted": True}]},
+            format="json",
+        )
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        foreign.refresh_from_db()
+        self.assertFalse(foreign.deleted)  # untouched
+
+    def test_cannot_edit_others_transcript(self):
+        theirs = Project.objects.create(user=self.other, title="Theirs")
+        Transcript.objects.create(project=theirs)
+        res = self.client.patch(
+            self._url(theirs.id),
+            {"segments": []},
+            format="json",
+        )
+        self.assertEqual(res.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_requires_auth(self):
+        self.client.force_authenticate(None)
+        self.assertEqual(
+            self.client.get(self._url()).status_code, status.HTTP_401_UNAUTHORIZED
+        )
