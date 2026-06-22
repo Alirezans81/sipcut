@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { RequireAuth } from "@/components/auth/require-auth";
 import { AppHeader } from "@/components/app-header";
 import { TranscriptEditor } from "@/components/transcripts/transcript-editor";
+import { Timeline } from "@/components/transcripts/timeline";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ApiError } from "@/lib/api-client";
 import { useAuth } from "@/lib/auth-context";
@@ -34,6 +35,8 @@ function EditorWorkspace() {
   const [hist, setHist] = useState<History>({ stack: [], cursor: -1 });
   const [activeId, setActiveId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [state, setState] = useState<"loading" | "ready" | "unavailable">(
     "loading",
   );
@@ -65,6 +68,7 @@ function EditorWorkspace() {
           return;
         }
         setVideoUrl(res.timeline.source_video.url);
+        setDuration(res.timeline.source_video.duration);
         setHist({ stack: [res.timeline.segments], cursor: 0 });
         setState("ready");
       })
@@ -125,7 +129,16 @@ function EditorWorkspace() {
     const v = videoRef.current;
     if (!v) return;
     v.currentTime = seg.start_time;
+    setCurrentTime(seg.start_time);
     v.play().catch(() => {});
+  }
+
+  // Seek from the timeline (raw seconds), without auto-playing.
+  function seekTo(time: number) {
+    const v = videoRef.current;
+    if (!v) return;
+    v.currentTime = time;
+    setCurrentTime(time);
   }
 
   // Skip deleted spans during playback and highlight the active segment, so the
@@ -143,9 +156,11 @@ function EditorWorkspace() {
         .filter((s) => !s.deleted && s.start_time >= inDeleted.end_time)
         .sort((a, b) => a.start_time - b.start_time)[0];
       v.currentTime = next ? next.start_time : v.duration;
+      setCurrentTime(v.currentTime);
       return;
     }
 
+    setCurrentTime(t);
     const active = segments.find((s) => t >= s.start_time && t < s.end_time);
     setActiveId(active ? active.id : null);
   }
@@ -228,6 +243,10 @@ function EditorWorkspace() {
                   controls
                   playsInline
                   onTimeUpdate={onTimeUpdate}
+                  onLoadedMetadata={(e) => {
+                    const d = e.currentTarget.duration;
+                    if (Number.isFinite(d) && d > 0) setDuration(d);
+                  }}
                   className="h-full w-full object-cover"
                 />
               </div>
@@ -243,9 +262,14 @@ function EditorWorkspace() {
               </div>
             </div>
 
-            <p className="shrink-0 text-center text-xs text-muted-foreground">
-              تایم‌لاین در مرحله بعدی اضافه می‌شود.
-            </p>
+            <div className="shrink-0">
+              <Timeline
+                segments={segments}
+                duration={duration}
+                currentTime={currentTime}
+                onSeek={seekTo}
+              />
+            </div>
           </>
         )}
       </section>
