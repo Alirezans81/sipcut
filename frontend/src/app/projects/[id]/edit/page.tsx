@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { ArrowRight, Loader2, Redo2, Sparkles, Undo2 } from "lucide-react";
+import { ArrowRight, Captions, Loader2, Redo2, Sparkles, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { RequireAuth } from "@/components/auth/require-auth";
@@ -11,13 +11,20 @@ import { AppHeader } from "@/components/app-header";
 import { TranscriptEditor } from "@/components/transcripts/transcript-editor";
 import { Timeline } from "@/components/transcripts/timeline";
 import { CleanupDialog } from "@/components/cleanup/cleanup-dialog";
+import { SubtitleDialog } from "@/components/subtitles/subtitle-dialog";
+import { SubtitleOverlay } from "@/components/subtitles/subtitle-overlay";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ApiError } from "@/lib/api-client";
 import { useAuth } from "@/lib/auth-context";
 import { getProcessing } from "@/lib/processing-api";
 import { getCleanup } from "@/lib/cleanup-api";
+import { getSubtitles } from "@/lib/subtitles-api";
 import { updateTranscript } from "@/lib/transcript-api";
-import type { CleanupOperation, TranscriptSegment } from "@/lib/types";
+import type {
+  CleanupOperation,
+  SubtitlePreset,
+  TranscriptSegment,
+} from "@/lib/types";
 
 interface History {
   stack: TranscriptSegment[][];
@@ -41,6 +48,10 @@ function EditorWorkspace() {
   const [duration, setDuration] = useState(0);
   const [cleanup, setCleanup] = useState<CleanupOperation[]>([]);
   const [cleanupOpen, setCleanupOpen] = useState(false);
+  const [subtitlePresets, setSubtitlePresets] = useState<SubtitlePreset[]>([]);
+  const [appliedSubtitle, setAppliedSubtitle] = useState<SubtitlePreset | null>(null);
+  const [previewSubtitle, setPreviewSubtitle] = useState<SubtitlePreset | null>(null);
+  const [subtitleOpen, setSubtitleOpen] = useState(false);
   const [state, setState] = useState<"loading" | "ready" | "unavailable">(
     "loading",
   );
@@ -49,6 +60,10 @@ function EditorWorkspace() {
   const canUndo = hist.cursor > 0;
   const canRedo = hist.cursor < hist.stack.length - 1;
   const deletedCount = segments.filter((s) => s.deleted).length;
+  // The caption currently under the playhead (kept segments only).
+  const activeCue = segments.find(
+    (s) => !s.deleted && currentTime >= s.start_time && currentTime < s.end_time,
+  );
 
   const bounceTo401 = (err: unknown) => {
     if (err instanceof ApiError && err.status === 401) {
@@ -86,6 +101,12 @@ function EditorWorkspace() {
     if (!projectId) return;
     getCleanup(projectId)
       .then((s) => setCleanup(s.operations))
+      .catch(() => {});
+    getSubtitles(projectId)
+      .then((s) => {
+        setSubtitlePresets(s.presets);
+        if (s.subtitle) setAppliedSubtitle(s.subtitle.style);
+      })
       .catch(() => {});
   }, [projectId]);
 
@@ -260,12 +281,21 @@ function EditorWorkspace() {
                   <Sparkles className="size-4" />
                   پاک‌سازی
                 </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => setSubtitleOpen(true)}
+                >
+                  <Captions className="size-4" />
+                  زیرنویس
+                </Button>
               </div>
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col gap-4 lg:flex-row">
-              {/* 9:16 preview — narrow vertical frame beside the transcript. */}
-              <div className="mx-auto aspect-9/16 max-h-[42dvh] shrink-0 overflow-hidden rounded-2xl border border-border bg-black lg:mx-0 lg:h-full lg:max-h-none">
+              {/* 9:16 preview — narrow vertical frame beside the transcript.
+                  `@container` lets the subtitle overlay size text in `cqw`. */}
+              <div className="relative mx-auto aspect-9/16 max-h-[42dvh] shrink-0 overflow-hidden rounded-2xl border border-border bg-black @container lg:mx-0 lg:h-full lg:max-h-none">
                 <video
                   ref={videoRef}
                   src={videoUrl ?? undefined}
@@ -277,6 +307,10 @@ function EditorWorkspace() {
                     if (Number.isFinite(d) && d > 0) setDuration(d);
                   }}
                   className="h-full w-full object-cover"
+                />
+                <SubtitleOverlay
+                  text={activeCue?.text ?? null}
+                  style={previewSubtitle ?? appliedSubtitle}
                 />
               </div>
 
@@ -297,6 +331,7 @@ function EditorWorkspace() {
                 cleanup={cleanup}
                 duration={duration}
                 currentTime={currentTime}
+                showSubtitles={!!appliedSubtitle}
                 onSeek={seekTo}
               />
             </div>
@@ -306,6 +341,22 @@ function EditorWorkspace() {
               open={cleanupOpen}
               onOpenChange={setCleanupOpen}
               onChange={setCleanup}
+            />
+
+            <SubtitleDialog
+              projectId={projectId}
+              open={subtitleOpen}
+              onOpenChange={(o) => {
+                setSubtitleOpen(o);
+                if (!o) setPreviewSubtitle(null); // drop unsaved live preview
+              }}
+              presets={subtitlePresets}
+              currentPreset={appliedSubtitle?.preset ?? null}
+              onPreview={setPreviewSubtitle}
+              onApplied={(style) => {
+                setAppliedSubtitle(style);
+                setPreviewSubtitle(null);
+              }}
             />
           </>
         )}

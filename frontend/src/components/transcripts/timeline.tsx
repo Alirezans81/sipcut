@@ -15,12 +15,14 @@ export function Timeline({
   cleanup = [],
   duration,
   currentTime,
+  showSubtitles = true,
   onSeek,
 }: {
   segments: TranscriptSegment[];
   cleanup?: CleanupOperation[];
   duration: number;
   currentTime: number;
+  showSubtitles?: boolean;
   onSeek: (time: number) => void;
 }) {
   const pct = (value: number) =>
@@ -95,15 +97,17 @@ export function Timeline({
       </div>
 
       {/* Subtitle regions: where captions will be burned (kept, spoken segments). */}
-      <div className="relative h-1.5 w-full rounded bg-secondary/50" title="نواحی زیرنویس">
-        {subtitleRegions.map((seg) => (
-          <div
-            key={seg.id}
-            className="absolute inset-y-0 rounded-full bg-info/70"
-            style={{ left: pct(seg.start_time), width: pct(seg.end_time - seg.start_time) }}
-          />
-        ))}
-      </div>
+      {showSubtitles && (
+        <div className="relative h-1.5 w-full rounded bg-secondary/50" title="نواحی زیرنویس">
+          {subtitleRegions.map((seg) => (
+            <div
+              key={seg.id}
+              className="absolute inset-y-0 rounded-full bg-info/70"
+              style={{ left: pct(seg.start_time), width: pct(seg.end_time - seg.start_time) }}
+            />
+          ))}
+        </div>
+      )}
 
       {/* Time readout + legend */}
       <div className="flex items-center justify-between text-[11px] text-muted-foreground">
@@ -125,10 +129,12 @@ export function Timeline({
               پاک‌سازی
             </span>
           )}
-          <span className="flex items-center gap-1">
-            <span className="size-2 rounded-full bg-info/70" />
-            زیرنویس
-          </span>
+          {showSubtitles && (
+            <span className="flex items-center gap-1">
+              <span className="size-2 rounded-full bg-info/70" />
+              زیرنویس
+            </span>
+          )}
         </span>
       </div>
     </div>

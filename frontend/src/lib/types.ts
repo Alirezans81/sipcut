@@ -95,6 +95,30 @@ export interface CleanupState {
   summary: CleanupSummary;
 }
 
+/** A subtitle style preset and its render attributes (Epic 10). */
+export interface SubtitlePreset {
+  preset: string;
+  label: string;
+  font_size: number; // cqw units — scales with the preview frame
+  font_weight: number;
+  text_color: string;
+  outline_color: string;
+  background: string;
+  position: "bottom" | "center";
+}
+
+export interface SubtitleTrack {
+  preset: string;
+  style: SubtitlePreset;
+  url: string | null;
+  created_at: string;
+}
+
+export interface SubtitleState {
+  presets: SubtitlePreset[];
+  subtitle: SubtitleTrack | null;
+}
+
 export interface ProcessingState {
   status: ProjectStatus;
   timeline: Timeline;
